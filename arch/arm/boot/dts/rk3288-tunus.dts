@@ -522,22 +522,6 @@
 
 &i2c1 {
 	status = "okay";
-
-	mpu6050@68 {
-		compatible = "invensense,mpu6050";
-		reg = <0x68>;
-		interrupt-parent = <&gpio5>;
-		interrupts = <RK_PB4 IRQ_TYPE_LEVEL_LOW>;
-		mount-matrix = "0",
-			       "1",
-			       "0",
-			       "-1",
-			       "0",
-			       "0",
-			       "0",
-			       "0",
-			       "-1";
-	};
 };
 
 &i2c2 {
@@ -546,6 +530,20 @@
 
 &i2c4 {
 	status = "okay";
+	clock-frequency = <400000>;
+
+	gt9xx: gt9xx@14 {
+		compatible = "goodix,gt9xx";
+		reg = <0x14>;
+		touch-gpio = <&gpio7 6 IRQ_TYPE_LEVEL_LOW>;
+		reset-gpio = <&gpio7 5 GPIO_ACTIVE_LOW>;
+		max-x = <800>;
+		max-y = <480>;
+		tp-size = <911>;
+		tp-supply = <&vcca_33>;
+		status = "okay";
+	};
+
 };
 
 &io_domains {
