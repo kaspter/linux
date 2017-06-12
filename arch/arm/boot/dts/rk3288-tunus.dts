@@ -603,6 +603,10 @@
 			rockchip,pins = <0 1 RK_FUNC_GPIO &pcfg_output_high>;
 		};
 
+		pmic_sleep: pmic-sleep {
+			rockchip,pins = <0 0 RK_FUNC_GPIO &pcfg_output_low>;
+		};
+
 		pmic_vsel: pmic-vsel {
 			rockchip,pins = <7 14 RK_FUNC_GPIO &pcfg_output_low>;
 		};
