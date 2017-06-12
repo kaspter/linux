@@ -759,6 +759,22 @@
 	pinctrl-names = "default";
 	pinctrl-0 = <&spi0_clk>, <&spi0_cs0>, <&spi0_tx>, <&spi0_rx>, <&spi0_cs1>;
 	status = "okay";
+
+	can0: can@0 {
+		compatible = "microchip,mcp2515";
+		reg = <0>;
+		//clocks = <&clk24M>;
+		spi-max-frequency = <10000000>;
+		interrupt-parent = <&gpio5>;
+		interrupts = <16 IRQ_TYPE_EDGE_FALLING>;
+		//vdd-supply = <&reg_can>;
+	};
+
+	spidev0: spi@1 {
+		compatible = "spidev";
+		reg = <1>;
+		spi-max-frequency = <25000000>;
+	};
 };
 
 &tsadc {
