@@ -41,11 +41,11 @@
  */
 
 /dts-v1/;
-#include "rk3288-firefly.dtsi"
+#include "rk3288-tunus.dtsi"
 
 / {
-	model = "Firefly-RK3288";
-	compatible = "firefly,firefly-rk3288", "rockchip,rk3288";
+	model = "Tunus-RK3288";
+	compatible = "rtums,tunus-rk3288", "rockchip,rk3288";
 };
 
 &ir {
