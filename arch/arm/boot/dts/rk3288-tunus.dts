@@ -94,6 +94,14 @@
 		power-supply = <&vcc_sys>;
 	};
 
+	lvds_panel: lvds_panel {
+		compatible ="auo,b101ew05","simple-panel";
+		enable-gpios = <&gpio7 4 GPIO_ACTIVE_HIGH>;
+		pinctrl-0 = <&lcd_cs>;
+		power-supply = <&vcc_lcd>;
+		status = "disabled";
+	};
+
 	panel: panel {
 		compatible ="lg,lp079qx1-sp0v";
 		power-supply = <&vcc_sys>;
@@ -194,6 +202,17 @@
 		compatible = "linux,spdif-dit";
 		#sound-dai-cells = <0>;
 	};
+
+	vcc_lcd: vcc-lcd {
+		compatible = "regulator-fixed";
+		enable-active-high;
+		gpio = <&gpio7 3 GPIO_ACTIVE_HIGH>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&lcd_en>;
+		regulator-name = "vcc_lcd";
+		vin-supply = <&vcc_io>;
+	};
+
 
 	vbat_wl: vcc_sys: vsys-regulator {
 		compatible = "regulator-fixed";
@@ -707,6 +726,16 @@
 		};
 	};
 
+	lcd {
+		lcd_cs: lcd-cs {
+			rockchip,pins = <7 4 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+
+		lcd_en: lcd-en  {
+			rockchip,pins = <7 3 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+	};
+
 	wireless-bluetooth {
 		uart0_gpios: uart0-gpios {
 			rockchip,pins = <4 19 RK_FUNC_GPIO &pcfg_pull_none>;
@@ -818,6 +847,18 @@
 &usb_otg {
 	status = "okay";
 };
+
+
+
+&lvds {
+	rockchip,data-mapping = "vesa";
+	rockchip,data-width = <24>;
+	rockchip,output = "rgb";
+	rockchip,panel = <&lvds_panel>;
+	status = "disabled";
+};
+
+
 
 &vopb {
 	status = "okay";
