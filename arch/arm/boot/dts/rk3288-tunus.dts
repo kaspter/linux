@@ -305,7 +305,7 @@
 		BT,reset_gpio    = <&gpio4 29 GPIO_ACTIVE_HIGH>;
 		BT,wake_gpio     = <&gpio4 26 GPIO_ACTIVE_HIGH>;
 		BT,wake_host_irq = <&gpio4 31 GPIO_ACTIVE_HIGH>;
-		status = "okay";
+		status = "disabled";
 	};
 
 	wireless-wlan {
@@ -314,7 +314,7 @@
 		wifi_chip_type = "ap6335";
 		sdio_vref = <1800>;
 		WIFI,host_wake_irq = <&gpio4 30 GPIO_ACTIVE_HIGH>;
-		status = "okay";
+		status = "disabled";
 	};
 };
 
@@ -326,7 +326,7 @@
 	vcc-supply = <&vdd_10>;
 	vccio-supply = <&vcc_18>;
 	force-hpd;
-	status = "okay";
+	status = "disabled";
 
 	ports {
 		edp_out: port@1 {
@@ -346,7 +346,7 @@
 };
 
 &edp_phy {
-	status = "okay";
+	status = "disabled";
 };
 
 &emmc {
@@ -377,7 +377,7 @@
 	snps,reset-gpio = <&gpio4 8 GPIO_ACTIVE_LOW>;
 	tx_delay = <0x30>;
 	rx_delay = <0x10>;
-	status = "ok";
+	status = "disabled";
 };
 
 &gpu {
@@ -577,7 +577,7 @@
 		max-y = <480>;
 		tp-size = <911>;
 		tp-supply = <&vcca_33>;
-		status = "okay";
+		status = "disabled";
 	};
 
 };
@@ -788,7 +788,7 @@
 };
 
 &spdif {
-	status = "okay";
+	status = "disabled";
 };
 
 &spi0 {
@@ -796,6 +796,7 @@
 	pinctrl-0 = <&spi0_clk>, <&spi0_cs0>, <&spi0_tx>, <&spi0_rx>, <&spi0_cs1>;
 	status = "okay";
 
+/*
 	can0: can@0 {
 		compatible = "microchip,mcp2515";
 		reg = <0>;
@@ -811,6 +812,7 @@
 		reg = <1>;
 		spi-max-frequency = <25000000>;
 	};
+*/
 };
 
 &tsadc {
