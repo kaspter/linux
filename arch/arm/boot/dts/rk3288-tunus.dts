@@ -102,7 +102,7 @@
 		status = "disabled";
 	};
 
-	panel: panel {
+	edp_panel: edp_panel {
 		compatible ="lg,lp079qx1-sp0v";
 		power-supply = <&vcc_sys>;
 		backlight = <&backlight>;
@@ -853,14 +853,36 @@
 	status = "okay";
 };
 
+&lvds_panel {
+	status = "okay";
 
+	disp_timings: display-timings {
+		native-mode = <&timing0>;
+
+		timing0: timing0 {
+			clock-frequency = <27000000>;
+			hactive = <800>;
+			vactive = <480>;
+			hfront-porch = <40>;
+			hsync-len = <10>;
+			hback-porch = <206>;
+			vfront-porch = <10>;
+			vsync-len = <10>;
+			vback-porch = <25>;
+			hsync-active = <0>;
+			vsync-active = <0>;
+			de-active = <0>;
+			pixelclk-active = <0>;
+		};
+	};
+};
 
 &lvds {
-	rockchip,data-mapping = "vesa";
+	rockchip,data-mapping = "jeida";
 	rockchip,data-width = <24>;
 	rockchip,output = "rgb";
 	rockchip,panel = <&lvds_panel>;
-	status = "disabled";
+	status = "okay";
 };
 
 
