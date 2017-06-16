@@ -117,14 +117,6 @@
 		};
 	};
 
-	dovdd_1v8: dovdd-1v8-regulator {
-		compatible = "regulator-fixed";
-		regulator-name = "dovdd_1v8";
-		regulator-min-microvolt = <1800000>;
-		regulator-max-microvolt = <1800000>;
-		vin-supply = <&vcc28_dvp>;
-	};
-
 	ext_gmac: external-gmac-clock {
 		compatible = "fixed-clock";
 		#clock-cells = <0>;
@@ -243,9 +235,9 @@
 		vin-supply = <&vcc_io>;
 	};
 
-	vcc_5v: usb-regulator {
+	vcc_sys_5v: usb-regulator {
 		compatible = "regulator-fixed";
-		regulator-name = "vcc_5v";
+		regulator-name = "vcc_sys_5v";
 		regulator-min-microvolt = <5000000>;
 		regulator-max-microvolt = <5000000>;
 		regulator-always-on;
@@ -263,7 +255,7 @@
 		regulator-min-microvolt = <5000000>;
 		regulator-max-microvolt = <5000000>;
 		regulator-always-on;
-		vin-supply = <&vcc_5v>;
+		vin-supply = <&vcc_sys_5v>;
 	};
 
 	vcc_otg_5v: usb-otg-regulator {
@@ -276,13 +268,26 @@
 		regulator-min-microvolt = <5000000>;
 		regulator-max-microvolt = <5000000>;
 		regulator-always-on;
-		vin-supply = <&vcc_5v>;
+		vin-supply = <&vcc_sys_5v>;
 	};
 
 	/*
-	 * A TT8142 creates both dovdd_1v8 and vcc28_dvp, controlled
+	 * A TT8112 creates vcc18_dvp/vcc28_dvp/af_28, controlled
 	 * by the dvp_pwr pin.
 	 */
+
+	vcc18_dvp: vcc18-dvp-regulator {
+		compatible = "regulator-fixed";
+		enable-active-high;
+		gpio = <&gpio0 11 GPIO_ACTIVE_HIGH>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&dvp_pwr>;
+		regulator-name = "vcc18_dvp";
+		regulator-min-microvolt = <1800000>;
+		regulator-max-microvolt = <1800000>;
+		vin-supply = <&vcc_io>;
+	};
+
 	vcc28_dvp: vcc28-dvp-regulator {
 		compatible = "regulator-fixed";
 		enable-active-high;
@@ -293,8 +298,36 @@
 		regulator-min-microvolt = <2800000>;
 		regulator-max-microvolt = <2800000>;
 		regulator-always-on;
+		vin-supply = <&vcc_sys>;
+	};
+
+
+	af_28: af-28-regulator {
+		compatible = "regulator-fixed";
+		enable-active-high;
+		gpio = <&gpio0 11 GPIO_ACTIVE_HIGH>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&dvp_pwr>;
+		regulator-name = "af_28";
+		regulator-min-microvolt = <2800000>;
+		regulator-max-microvolt = <2800000>;
+		vin-supply = <&vcc_sys>;
+	};
+
+	dvdd_1v2: dvdd-12-regulator {
+		compatible = "regulator-fixed";
+		enable-active-high;
+		gpio = <&gpio7 12 GPIO_ACTIVE_HIGH>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&cif_pwr>;
+		regulator-name = "dvdd_1v2";
+		regulator-min-microvolt = <1200000>;
+		regulator-max-microvolt = <1200000>;
 		vin-supply = <&vcc_io>;
 	};
+
+
+
 
 	wireless-bluetooth {
 		compatible = "bluetooth-platdata";
@@ -588,7 +621,7 @@
 	/* audio-supply = <&vcca_33>; */
 	audio-supply = <&vccio_wl>;
 	bb-supply = <&vcc_io>;
-	dvp-supply = <&dovdd_1v8>;
+	dvp-supply = <&vcc18_dvp>;
 	flash0-supply = <&vcc_flash>;
 	flash1-supply = <&vcc_lan>;
 	gpio30-supply = <&vcc_io>;
@@ -643,6 +676,10 @@
 	dvp {
 		dvp_pwr: dvp-pwr {
 			rockchip,pins = <0 11 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+
+		cif_pwr: cif-pwr {
+			rockchip,pins = <7 12 RK_FUNC_GPIO &pcfg_pull_none>;
 		};
 	};
 
