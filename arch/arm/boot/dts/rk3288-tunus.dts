@@ -882,6 +882,10 @@
 	};
 };
 
+&lvds_in {
+	/delete-node/ endpoint@0;
+};
+
 &lvds {
 	status = "okay";
 
