@@ -96,11 +96,17 @@
 	};
 
 	lvds_panel: lvds_panel {
-		compatible ="auo,b101ew05","simple-panel";
+		compatible ="simple-panel";
+		backlight = <&backlight>;
 		enable-gpios = <&gpio7 4 GPIO_ACTIVE_HIGH>;
 		pinctrl-0 = <&lcd_cs>;
 		power-supply = <&vcc_lcd>;
-		status = "disabled";
+
+		ports {
+			panel_in_lvds: endpoint {
+				remote-endpoint = <&lvds_out_panel>;
+			};
+		};
 	};
 
 	edp_panel: edp_panel {
@@ -885,9 +891,15 @@
 	status = "okay";
 };
 
+
 &lvds_panel {
 	status = "okay";
 	backlight = <&backlight>;
+
+	rockchip,data-mapping = "jeida";
+	rockchip,data-width = <24>;
+	rockchip,output = "rgb";
+	rockchip,panel = <&lvds_panel>;
 
 	disp_timings: display-timings {
 		native-mode = <&timing0>;
@@ -911,14 +923,22 @@
 };
 
 &lvds {
-	rockchip,data-mapping = "jeida";
-	rockchip,data-width = <24>;
-	rockchip,output = "rgb";
-	rockchip,panel = <&lvds_panel>;
 	status = "okay";
+
+	ports {
+		lvds_out: port@1 {
+			reg = <1>;
+			#address-cells = <1>;
+			#size-cells = <0>;
+
+			lvds_out_panel: endpoint@0 {
+				reg = <0>;
+				remote-endpoint = <&panel_in_lvds>;
+			};
+		};
+	};
+
 };
-
-
 
 &vopb {
 	status = "okay";
