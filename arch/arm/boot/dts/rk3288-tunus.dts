@@ -109,21 +109,6 @@
 		};
 	};
 
-	edp_panel: edp_panel {
-		compatible ="lg,lp079qx1-sp0v";
-		power-supply = <&vcc_sys>;
-		backlight = <&backlight>;
-		enable-gpios = <&gpio0 RK_PB5 GPIO_ACTIVE_HIGH>;
-
-		ports {
-			panel_in: port {
-				panel_in_edp: endpoint {
-					remote-endpoint = <&edp_out_panel>;
-				};
-			};
-		};
-	};
-
 	ext_gmac: external-gmac-clock {
 		compatible = "fixed-clock";
 		#clock-cells = <0>;
@@ -355,33 +340,6 @@
 
 &cpu0 {
 	cpu0-supply = <&vdd_cpu>;
-};
-
-&edp {
-	vcc-supply = <&vdd_10>;
-	vccio-supply = <&vcc_18>;
-	force-hpd;
-	status = "disabled";
-
-	ports {
-		edp_out: port@1 {
-			reg = <1>;
-			#address-cells = <1>;
-			#size-cells = <0>;
-			edp_out_panel: endpoint {
-				reg = <0>;
-				remote-endpoint = <&panel_in_edp>;
-			};
-		};
-	};
-};
-
-&edp_in {
-	/delete-node/ endpoint@0;
-};
-
-&edp_phy {
-	status = "disabled";
 };
 
 &emmc {
