@@ -98,8 +98,8 @@
 	lvds_panel: lvds_panel {
 		compatible ="simple-panel";
 		backlight = <&backlight>;
-		enable-gpios = <&gpio7 4 GPIO_ACTIVE_HIGH>;
-		pinctrl-0 = <&lcd_cs>;
+		/* enable-gpios = <&gpio7 4 GPIO_ACTIVE_HIGH>; */
+		/* pinctrl-0 = <&lcd_cs>; */
 		power-supply = <&vcc_lcd>;
 
 		ports {
@@ -768,10 +768,11 @@
 	};
 
 	lcd {
+	/*
 		lcd_cs: lcd-cs {
 			rockchip,pins = <7 4 RK_FUNC_GPIO &pcfg_pull_none>;
 		};
-
+	*/
 		lcd_en: lcd-en  {
 			rockchip,pins = <7 3 RK_FUNC_GPIO &pcfg_pull_none>;
 		};
