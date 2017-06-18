@@ -96,15 +96,17 @@
 	};
 
 	lvds_panel: lvds_panel {
-		compatible ="simple-panel";
+		compatible ="edt,et070080dh6", "simple-panel";
 		backlight = <&backlight>;
 		/* enable-gpios = <&gpio7 4 GPIO_ACTIVE_HIGH>; */
 		/* pinctrl-0 = <&lcd_cs>; */
 		power-supply = <&vcc_lcd>;
 
 		ports {
-			panel_in_lvds: endpoint {
-				remote-endpoint = <&lvds_out_panel>;
+			panel_in:port {
+				panel_in_lvds: endpoint {
+					remote-endpoint = <&lvds_out_panel>;
+				};
 			};
 		};
 	};
@@ -265,10 +267,6 @@
 
 	vcc18_dvp: vcc18-dvp-regulator {
 		compatible = "regulator-fixed";
-		enable-active-high;
-		gpio = <&gpio0 11 GPIO_ACTIVE_HIGH>;
-		pinctrl-names = "default";
-		pinctrl-0 = <&dvp_pwr>;
 		regulator-name = "vcc18_dvp";
 		regulator-min-microvolt = <1800000>;
 		regulator-max-microvolt = <1800000>;
@@ -291,10 +289,6 @@
 
 	af_28: af-28-regulator {
 		compatible = "regulator-fixed";
-		enable-active-high;
-		gpio = <&gpio0 11 GPIO_ACTIVE_HIGH>;
-		pinctrl-names = "default";
-		pinctrl-0 = <&dvp_pwr>;
 		regulator-name = "af_28";
 		regulator-min-microvolt = <2800000>;
 		regulator-max-microvolt = <2800000>;
