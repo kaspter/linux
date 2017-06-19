@@ -1732,6 +1732,31 @@ static const struct panel_desc shelly_sca07010_bfn_lnn = {
 	.bus_format = MEDIA_BUS_FMT_RGB666_1X18,
 };
 
+static const struct drm_display_mode startek_kd050c1a_mode = {
+       .clock = 33300,
+       .hdisplay = 800,
+       .hsync_start = 800 + 210,
+       .hsync_end = 800 + 210 + 20,
+       .htotal = 800 + 210 + 20 + 46,
+       .vdisplay = 480,
+       .vsync_start = 480 + 22,
+       .vsync_end = 480 + 22 + 10,
+       .vtotal = 480 + 22 + 10 + 23,
+       .vrefresh = 60,
+};
+
+static const struct panel_desc startek_kd050c1a = {
+       .modes = &startek_kd050c1a_mode,
+       .num_modes = 1,
+       .bpc = 8,
+       .size = {
+               .width = 120,
+               .height = 75,
+       },
+       .bus_format = MEDIA_BUS_FMT_RGB888_1X24,
+};
+
+
 static const struct of_device_id platform_of_match[] = {
 	{
 		.compatible = "simple-panel",
@@ -1865,6 +1890,9 @@ static const struct of_device_id platform_of_match[] = {
 	}, {
 		.compatible = "shelly,sca07010-bfn-lnn",
 		.data = &shelly_sca07010_bfn_lnn,
+	}, {
+		.compatible = "startek,kd050c1a",
+		.data = &startek_kd050c1a,
 	}, {
 		/* sentinel */
 	}
