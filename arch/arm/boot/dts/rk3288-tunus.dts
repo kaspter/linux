@@ -179,12 +179,12 @@
 
 	vcc_lcd: vcc-lcd {
 		compatible = "regulator-fixed";
-		regulator-boot-on;
 		enable-active-high;
 		gpio = <&gpio7 3 GPIO_ACTIVE_HIGH>;
 		pinctrl-names = "default";
 		pinctrl-0 = <&lcd_en>;
 		regulator-name = "vcc_lcd";
+		regulator-boot-on;
 		vin-supply = <&vcc_io>;
 	};
 
@@ -486,6 +486,7 @@
 				regulator-name = "vcca_33";
 				regulator-min-microvolt = <3300000>;
 				regulator-max-microvolt = <3300000>;
+				regulator-always-on;
 			};
 
 			vcc_lan: REG8 {
@@ -499,6 +500,7 @@
 				regulator-name = "vccio_pmu";
 				regulator-min-microvolt = <3300000>;
 				regulator-max-microvolt = <3300000>;
+				regulator-always-on;
 			};
 
 			vdd_10: REG10 {
@@ -858,6 +860,7 @@
 	rockchip,data-width = <24>;
 	rockchip,output = "rgb";
 
+/**
 	disp_timings: display-timings {
 		native-mode = <&timing0>;
 
@@ -877,6 +880,8 @@
 			pixelclk-active = <0>;
 		};
 	};
+**/
+
 };
 
 
