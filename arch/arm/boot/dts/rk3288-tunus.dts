@@ -367,7 +367,7 @@
 };
 
 &hdmi {
-	status = "okay";
+	status = "disabled";
 	/* Don't use vopl for HDMI */
 	ports {
 		hdmi_in: port {
