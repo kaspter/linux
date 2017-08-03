@@ -1732,6 +1732,7 @@ static const struct panel_desc shelly_sca07010_bfn_lnn = {
 	.bus_format = MEDIA_BUS_FMT_RGB666_1X18,
 };
 
+#if 1
 static const struct drm_display_mode startek_kd050c1a_mode = {
        .clock = 33300,
        .hdisplay = 800,
@@ -1743,6 +1744,7 @@ static const struct drm_display_mode startek_kd050c1a_mode = {
        .vsync_end = 480 + 22 + 10,
        .vtotal = 480 + 22 + 10 + 23,
        .vrefresh = 60,
+       .flags = DRM_MODE_FLAG_NHSYNC | DRM_MODE_FLAG_NVSYNC,
 };
 
 static const struct panel_desc startek_kd050c1a = {
@@ -1756,6 +1758,37 @@ static const struct panel_desc startek_kd050c1a = {
        .bus_format = MEDIA_BUS_FMT_RGB888_1X24,
 };
 
+#else
+static const struct display_timing startek_kd050c1a_timing = {
+	.pixelclock = { 33300000, 33300000, 50000000 },
+	.hactive = { 800, 800, 800 },
+	.hfront_porch = { 210, 210, 210 },
+	.hback_porch = { 46, 46, 46 },
+	.hsync_len = { 20, 20, 20 },
+	.vactive = { 480, 480, 480 },
+	.vfront_porch = { 22, 22, 22 },
+	.vback_porch = { 23, 23, 23 },
+	.vsync_len = { 10, 10, 10 },
+	.flags = DISPLAY_FLAGS_DE_HIGH | DISPLAY_FLAGS_HSYNC_LOW | DISPLAY_FLAGS_VSYNC_LOW,
+};
+
+static const struct panel_desc startek_kd050c1a = {
+	.timings = &startek_kd050c1a_timing,
+	.num_timings = 1,
+	.bpc = 8,
+	.size = {
+		.width = 120,
+		.height = 75,
+	},
+	.delay = {
+		.prepare = 41,
+		.enable = 50,
+		.unprepare = 41,
+		.disable = 50,
+	},
+	.bus_format = MEDIA_BUS_FMT_RGB888_1X24,
+};
+#endif
 
 static const struct of_device_id platform_of_match[] = {
 	{
