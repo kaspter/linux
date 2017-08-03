@@ -24,6 +24,7 @@
 #include <linux/clk.h>
 #include <linux/mfd/syscon.h>
 #include <linux/of_graph.h>
+#include <linux/regulator/consumer.h>
 #include <linux/pm_runtime.h>
 #include <linux/regmap.h>
 #include <linux/reset.h>
@@ -69,6 +70,8 @@ struct rockchip_lvds {
 	struct clk *pclk_ctrl;
 	struct clk *hclk_ctrl;
 	const struct rockchip_lvds_soc_data *soc_data;
+
+	struct regulator_bulk_data supplies[3];
 
 	int output;
 	int format;
@@ -301,6 +304,14 @@ static int rockchip_lvds_poweron(struct rockchip_lvds *lvds)
 {
 	int ret;
 
+	printk("call %s\n", __func__);
+
+	ret = regulator_bulk_enable(ARRAY_SIZE(lvds->supplies), lvds->supplies);
+	if (ret < 0) {
+		dev_err(lvds->dev, "failed to enable lvds regulater %d\n", ret);
+		return ret;
+	}
+
 	if (lvds->pclk) {
 		ret = clk_enable(lvds->pclk);
 		if (ret < 0) {
@@ -388,6 +399,8 @@ static void rockchip_lvds_poweroff(struct rockchip_lvds *lvds)
 		if (lvds->hclk_ctrl)
 			clk_disable(lvds->hclk_ctrl);
 	}
+
+	regulator_bulk_disable(ARRAY_SIZE(lvds->supplies), lvds->supplies);
 }
 
 static enum drm_connector_status
@@ -1032,6 +1045,16 @@ static int rockchip_lvds_probe(struct platform_device *pdev)
 			lvds->hclk_ctrl = NULL;
 		}
 	}
+
+	lvds->supplies[0].supply = "avdd1v0";
+	lvds->supplies[1].supply = "avdd1v8";
+	lvds->supplies[2].supply = "avdd3v3";
+	ret = devm_regulator_bulk_get(dev, ARRAY_SIZE(lvds->supplies), lvds->supplies);
+	if (ret < 0) {
+		dev_err(dev, "could not get lvds regulater \n");
+		return ret;
+	}
+
 	lvds->pclk = devm_clk_get(&pdev->dev, "pclk_lvds");
 	if (IS_ERR(lvds->pclk)) {
 		dev_err(dev, "could not get pclk_lvds\n");
