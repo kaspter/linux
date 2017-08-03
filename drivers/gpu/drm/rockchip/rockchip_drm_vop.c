@@ -2325,6 +2325,25 @@ static void vop_crtc_enable(struct drm_crtc *crtc)
 		   0 : BIT(HSYNC_POSITIVE);
 	val |= (adjusted_mode->flags & DRM_MODE_FLAG_NVSYNC) ?
 		   0 : BIT(VSYNC_POSITIVE);
+
+//	val |= (adjusted_mode->flags & DISPLAY_FLAGS_DE_HIGH) ?
+//		   0 : BIT(DEN_NEGATIVE);
+
+	printk("==== %s htotal = %d, hdisplay = %d, hsync_len = %d\n", __func__, htotal, hdisplay, hsync_len);
+	printk("==== %s vtotal = %d, vdisplay = %d, vsync_len = %d\n", __func__, vtotal, vdisplay, vsync_len);
+
+	if (val & BIT(HSYNC_POSITIVE)) {
+		printk("==== %s HSYNC_POSITIVE bit = 1\n", __func__);
+	}
+
+	if (val & BIT(VSYNC_POSITIVE)) {
+		printk("==== %s VSYNC_POSITIVE bit = 1\n", __func__);
+	}
+
+	if (val & BIT(DEN_NEGATIVE)) {
+		printk("==== %s DEN_NEGATIVE bit = 1\n", __func__);
+	}
+
 	VOP_CTRL_SET(vop, pin_pol, val);
 
 	if (vop->dclk_source && vop->pll && vop->pll->pll) {
