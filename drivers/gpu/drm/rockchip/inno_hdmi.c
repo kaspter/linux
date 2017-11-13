@@ -1190,6 +1190,8 @@ static int inno_hdmi_remove(struct platform_device *pdev)
 static const struct of_device_id inno_hdmi_dt_ids[] = {
 	{ .compatible = "rockchip,rk3036-inno-hdmi",
 	},
+	{ .compatible = "rockchip,rk3128-inno-hdmi",
+	},
 	{},
 };
 MODULE_DEVICE_TABLE(of, inno_hdmi_dt_ids);
