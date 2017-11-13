@@ -55,6 +55,69 @@
 		#clock-cells = <1>;
 		#reset-cells = <1>;
 	};
+
+	acodec: acodec-ana@20030000 {
+		compatible = "rk3036-codec";
+		reg = <0x20030000 0x4000>;
+		rockchip,grf = <&grf>;
+		clock-names = "acodec_pclk";
+		clocks = <&cru PCLK_ACODEC>;
+		status = "disabled";
+	};
+
+	hdmi: hdmi@20034000 {
+		compatible = "rockchip,rk3128-inno-hdmi";
+		reg = <0x20034000 0x4000>;
+		interrupts = <GIC_SPI 45 IRQ_TYPE_LEVEL_HIGH>;
+		clocks =  <&cru ACLK_VIO>, <&cru PCLK_HDMI>;
+		clock-names = "aclk", "pclk";
+		rockchip,grf = <&grf>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&hdmii2c_xfer>;
+		#address-cells = <1>;
+		#size-cells = <0>;
+		#sound-dai-cells = <0>;
+		status = "disabled";
+
+		hdmi_in: port {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			hdmi_in_vop: endpoint@0 {
+				reg = <0>;
+				remote-endpoint = <&vop_out_hdmi>;
+			};
+		};
+	};
+
+	hdmi_sound: hdmi-sound {
+		compatible = "simple-audio-card";
+		simple-audio-card,name = "rockchip,hdmi";
+		simple-audio-card,widgets = "Headphone", "Out Jack",
+					    "Line", "In Jack";
+		status = "disabled";
+
+		simple-audio-card,dai-link {
+			format = "i2s";
+			mclk-fs = <256>;
+			cpu {
+				sound-dai = <&i2s_2ch>;
+			};
+			codec {
+				sound-dai = <&hdmi>;
+			};
+		};
+	};
+
+
+
+
+};
+
+&vop_out {
+	vop_out_hdmi: endpoint@2 {
+		reg = <2>;
+		remote-endpoint = <&hdmi_in_vop>;
+	};
 };
 
 &pd_vio {
