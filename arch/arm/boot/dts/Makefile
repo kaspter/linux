@@ -520,6 +520,7 @@ dtb-$(CONFIG_ARCH_ROCKCHIP) += \
 	rk3126-bnd-d708.dtb \
 	rk3126-evb.dtb \
 	rk3128-fireprime.dtb \
+	rk3128-shura.dtb \
 	rk3128-tenas.dtb \
 	rk3188-radxarock.dtb \
 	rk3228-evb.dtb \
