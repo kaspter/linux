@@ -127,9 +127,14 @@
 	cpu-supply = <&vdd_arm>;
 };
 
-
-
-
+&display_subsystem {
+	status = "okay";
+	route {
+		route_lvds: route-lvds {
+			status = "disabled";
+		};
+	};
+};
 
 
 &dmc {
