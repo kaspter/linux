@@ -158,6 +158,14 @@
 	mali-supply = <&vdd_log>;
 };
 
+&hdmi {
+	status = "okay";
+};
+
+&hdmi_sound {
+	status = "okay";
+};
+
 &gmac {
 	assigned-clocks = <&cru SCLK_MAC>;
 	assigned-clock-parents = <&clkin_gmac>;
