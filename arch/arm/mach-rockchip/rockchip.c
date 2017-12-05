@@ -68,6 +68,7 @@ static const char * const rockchip_board_dt_compat[] = {
 	"rockchip,rk2928",
 	"rockchip,rk3066a",
 	"rockchip,rk3066b",
+	"rockchip,rk3128",
 	"rockchip,rk3188",
 	"rockchip,rk3288",
 	NULL,
