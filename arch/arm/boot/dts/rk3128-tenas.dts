@@ -86,15 +86,6 @@
 		regulator-boot-on;
 	};
 
-	vccadc_ref: vccadc-ref {
-		compatible = "regulator-fixed";
-		regulator-name = "SARADC_AVDD33";
-		regulator-always-on;
-		regulator-boot-on;
-		regulator-min-microvolt = <3300000>;
-		regulator-max-microvolt = <3300000>;
-	};
-
 	vcc_sys: vcc-sys {
 		compatible = "regulator-fixed";
 		regulator-name = "vcc_sys";
@@ -434,7 +425,7 @@
 
 &saradc {
 	status = "okay";
-	vref-supply = <&vccadc_ref>;
+	vref-supply = <&vcc_io>;
 };
 
 &sdmmc {
