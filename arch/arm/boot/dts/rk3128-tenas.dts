@@ -118,7 +118,7 @@
 		compatible = "wlan-platdata";
 
 		wifi_chip_type = "rtl8723bs";
-		/* WIFI,host_wake_irq = <&gpio3 GPIO_C7 GPIO_ACTIVE_HIGH>; */
+		WIFI,host_wake_irq = <&gpio3 RK_PC7 GPIO_ACTIVE_HIGH>;
 		status = "okay";
 	};
 };
@@ -138,7 +138,12 @@
 
 
 &dmc {
+	status = "okay";
 	center-supply = <&vdd_log>;
+};
+
+&dfi {
+	status = "okay";
 };
 
 &emmc {
@@ -154,7 +159,7 @@
 };
 
 &gpu {
-	status = "okay";
+	status = "disabled";
 	mali-supply = <&vdd_log>;
 };
 
@@ -190,8 +195,8 @@
 	rk816: pmic@1a {
 		compatible = "rockchip,rk816";
 		reg = <0x1a>;
-		interrupt-parent = <&gpio0>;
-		interrupts = <2 IRQ_TYPE_LEVEL_LOW>;
+		interrupt-parent = <&gpio1>;
+		interrupts = <11 IRQ_TYPE_LEVEL_LOW>;
 		pinctrl-names = "default";
 		pinctrl-0 = <&pmic_int_l>;
 		rockchip,system-power-controller;
@@ -206,7 +211,7 @@
 		vcc2-supply = <&vcc_sys>;
 		vcc3-supply = <&vcc_sys>;
 		vcc4-supply = <&vcc_sys>;
-		vcc5-supply = <&vcc_io>;
+		vcc5-supply = <&vcc_sys>;
 		vcc6-supply = <&vcc_sys>;
 
 		gpio {
@@ -218,7 +223,7 @@
 		};
 
 		rtc {
-			status = "okay";
+			status = "disabled";
 		};
 
 		battery {
@@ -290,8 +295,8 @@
 				};
 			};
 
-			vcc28_cif: LDO_REG1 {
-				regulator-name = "vcc28_cif";
+			vdd_fm: LDO_REG1 {
+				regulator-name = "vdd_fm";
 				regulator-min-microvolt = <2800000>;
 				regulator-max-microvolt = <2800000>;
 				regulator-always-on;
@@ -301,8 +306,8 @@
 				};
 			};
 
-			vcc18_cif: LDO_REG2 {
-				regulator-name = "vcc18_cif";
+			vcc_gps: LDO_REG2 {
+				regulator-name = "vcc_gps";
 				regulator-min-microvolt = <1800000>;
 				regulator-max-microvolt = <1800000>;
 				regulator-always-on;
@@ -324,10 +329,10 @@
 				};
 			};
 
-			ldo4: LDO_REG4 {
-				regulator-name= "ldo4";
-				regulator-min-microvolt = <3300000>;
-				regulator-max-microvolt = <3300000>;
+			vdd11_hdmi: LDO_REG4 {
+				regulator-name= "vdd11_hdmi";
+				regulator-min-microvolt = <1100000>;
+				regulator-max-microvolt = <1100000>;
 				regulator-always-on;
 				regulator-boot-on;
 				regulator-state-mem {
@@ -335,8 +340,8 @@
 				};
 			};
 
-			ldo5: LDO_REG5 {
-				regulator-name= "ldo5";
+			vcca_codec: LDO_REG5 {
+				regulator-name= "vcca_codec";
 				regulator-min-microvolt = <3000000>;
 				regulator-max-microvolt = <3000000>;
 				regulator-always-on;
@@ -346,8 +351,8 @@
 				};
 			};
 
-			ldo6: LDO_REG6 {
-				regulator-name= "ldo6";
+			vcc33_hdmi: LDO_REG6 {
+				regulator-name= "vcc33_hdmi";
 				regulator-min-microvolt = <3300000>;
 				regulator-max-microvolt = <3300000>;
 				regulator-state-mem {
@@ -408,7 +413,7 @@
 
 	pmic {
 		pmic_int_l: pmic-int-l {
-			rockchip,pins = <RK_GPIO3 22 RK_FUNC_GPIO &pcfg_pull_default>;
+			rockchip,pins = <RK_GPIO1 11 RK_FUNC_GPIO &pcfg_pull_default>;
 		};
 	};
 
