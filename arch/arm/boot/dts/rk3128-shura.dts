@@ -152,7 +152,7 @@
 
 		wifi_chip_type = "rtl8723bs";
 		/* WIFI,host_wake_irq = <&gpio3 GPIO_C7 GPIO_ACTIVE_HIGH>; */
-		status = "okay";
+		status = "disabled";
 	};
 };
 
