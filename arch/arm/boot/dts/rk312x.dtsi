@@ -824,16 +824,6 @@
 		status = "disabled";
 	};
 
-	pwm3: pwm@20050030 {
-		compatible = "rockchip,rk3288-pwm";
-		reg = <0x20050030 0x10>;
-		#pwm-cells = <3>;
-		pinctrl-names = "default";
-		pinctrl-0 = <&pwm3_pin>;
-		clocks = <&cru PCLK_PWM>;
-		clock-names = "pwm";
-		status = "disabled";
-	};
 
 	i2c1: i2c@20056000 {
 		compatible = "rockchip,rk3288-i2c";
@@ -1251,13 +1241,7 @@
 
 		pwm2 {
 			pwm2_pin: pwm2-pin {
-				rockchip,pins = <1 RK_PD4 1 &pcfg_pull_none>;
-			};
-		};
-
-		pwm3 {
-			pwm3_pin: pwm3-pin {
-				rockchip,pins = <3 RK_PD2 1 &pcfg_pull_none>;
+				rockchip,pins = <0 RK_PD4 1 &pcfg_pull_none>;
 			};
 		};
 
