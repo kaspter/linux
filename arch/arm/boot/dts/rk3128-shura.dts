@@ -305,13 +305,13 @@
 	status = "okay";
 	route {
 		route_dsi: route-dsi {
-			status = "okay";
+			status = "disabled";
 		};
 	};
 };
 
 &dsi {
-	status = "okay";
+	status = "disabled";
 	rockchip,lane-rate = <1000>;
 
 	panel: panel {
