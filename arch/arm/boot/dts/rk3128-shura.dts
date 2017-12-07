@@ -45,11 +45,34 @@
 #include <dt-bindings/pwm/pwm.h>
 #include <dt-bindings/sensor-dev.h>
 #include "rk3128.dtsi"
-#include "rk312x-android.dtsi"
+#include "rk3128-dram-default-timing.dtsi"
+
+#include <dt-bindings/soc/rockchip-system-status.h>
+#include <dt-bindings/display/mipi_dsi.h>
+#include <dt-bindings/display/drm_mipi_dsi.h>
+#include <dt-bindings/display/media-bus-format.h>
+
+
 
 / {
 	model = "RTAVS RK3128 Shura board";
 	compatible = "rtavs,rk3128-shura", "rockchip,rk3128";
+
+	chosen {
+		bootargs = "earlycon=uart8250,mmio32,0x20068000";
+	};
+
+	fiq-debugger {
+		compatible = "rockchip,fiq-debugger";
+		rockchip,serial-id = <2>;
+		rockchip,signal-irq = <159>;
+		rockchip,wake-irq = <0>;
+		/* If enable uart uses irq instead of fiq */
+		rockchip,irq-mode-enable = <0>;
+		rockchip,baudrate = <115200>;  /* Only 115200 and 1500000 */
+		interrupts = <GIC_SPI 127 IRQ_TYPE_LEVEL_LOW>;
+		status = "okay";
+	};
 
 	adc-keys {
 		compatible = "adc-keys";
@@ -70,6 +93,48 @@
 			press-threshold-microvolt = <1650000>;
 		};
 	};
+
+	backlight: backlight {
+		compatible = "pwm-backlight";
+		pwms = <&pwm0 0 25000 0>;
+		brightness-levels = <
+				255 169 168 168 167 166 166 165
+				164 164 163 162 162 161 160 160
+				159 158 158 157 156 156 155 154
+				154 153 152 152 151 150 150 149
+				148 148 147 146 146 145 144 144
+				143 142 142 141 140 140 139 138
+				138 137 136 136 135 134 134 133
+				132 132 131 130 130 129 128 128
+				127 126 126 125 124 124 123 122
+				122 121 120 120 119 118 118 117
+				116 116 115 114 114 113 112 112
+				111 110 110 109 108 108 107 106
+				106 105 104 104 103 102 102 101
+				100 100  99  98  98  97  96  96
+				 95  94  94  93  92  92  91  90
+				 90  89  88  88  87  86  86  85
+				 84  84  83  82  82  81  80  80
+				 79  78  78  77  76  76  75  74
+				 74  73  72  72  71  70  70  69
+				 68  68  67  66  66  65  64  64
+				 63  62  62  61  60  60  59  58
+				 58  57  56  56  55  54  54  53
+				 52  52  51  50  50  49  48  48
+				 47  46  46  45  44  44  43  42
+				 42  41  40  40  39  38  38  37
+				 36  36  35  34  34  33  32  32
+				 31  30  30  29  28  28  27  26
+				 26  25  24  24  23  22  22  21
+				 20  20  19  18  18  17  16  16
+				 15  14  14  13  12  12  11  10
+				 10   9   8   8   7   6   6   5
+				  4   4   3   2   1   1   1   0>;
+		default-brightness-level = <128>;
+		/* enable-gpios = <&gpio2 RK_PB6 GPIO_ACTIVE_HIGH>; */
+	};
+
+
 
 	vcc_sys: vcc-sys {
 		compatible = "regulator-fixed";
@@ -189,6 +254,17 @@
 		regulator-always-on;
 	};
 
+	vcc_lcd: vcc-lcd {
+		compatible = "regulator-fixed";
+		enable-active-high;
+		gpio = <&gpio2 RK_PC5 GPIO_ACTIVE_HIGH>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&vcc_lcd_en>;
+		regulator-name = "vcc_lcd_en";
+		regulator-always-on;
+	};
+
+
 	wireless-wlan {
 		compatible = "wlan-platdata";
 
@@ -200,11 +276,6 @@
 
 &cpu0 {
 	cpu-supply = <&vdd_arm>;
-};
-
-
-&dmc {
-	center-supply = <&vdd_log>;
 };
 
 &emmc {
@@ -263,6 +334,13 @@
 			rockchip,pins = <3 RK_PC4 RK_FUNC_GPIO &pcfg_pull_none>;
 		};
 	};
+
+	lcd {
+		vcc_lcd_en: vcc-lcd-en {
+			rockchip,pins = <2 RK_PC5 RK_FUNC_GPIO &pcfg_pull_none>;
+		};
+	};
+
 };
 
 
@@ -345,52 +423,78 @@
 
 &display_subsystem {
 	status = "okay";
+
 	route {
 		route_dsi: route-dsi {
+			status = "okay";
+			connect = <&vop_out_dsi>;
+		};
+
+		route_lvds: route-lvds {
 			status = "disabled";
+			connect = <&vop_out_lvds>;
 		};
 	};
 };
 
-&dsi {
-	status = "disabled";
-	rockchip,lane-rate = <1000>;
+&mipi_dphy {
+	status = "okay";
+};
 
-	panel: panel {
-/*
-		compatible = "simple-panel-dsi";
+
+&dsi {
+	status = "okay";
+
+	panel@0 {
+		compatible = "fc,fy07018dh26d372-d", "simple-panel-dsi";
 		reg = <0>;
 		backlight = <&backlight>;
-		enable-gpios = <&gpio7 4 GPIO_ACTIVE_HIGH>;
 		power-supply = <&vcc_lcd>;
-		dsi,flags = <(MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_BURST)>;
-		dsi,format = <MIPI_DSI_FMT_RGB888>;
-		dsi,lanes = <4>;
+		power-invert;
+		prepare-delay-ms = <20>;
 		reset-delay-ms = <20>;
 		init-delay-ms = <20>;
 		enable-delay-ms = <120>;
-		prepare-delay-ms = <120>;
-		status = "okay";
+		disable-delay-ms = <20>;
+		unprepare-delay-ms = <20>;
 
-		disp_timings: display-timings {
+		width-mm = <153>;
+		height-mm = <85>;
+
+		dsi,flags = <(MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_BURST |
+			      MIPI_DSI_MODE_LPM | MIPI_DSI_MODE_EOT_PACKET)>;
+		dsi,format = <MIPI_DSI_FMT_RGB888>;
+		dsi,lanes = <4>;
+
+		panel-init-sequence = [
+			05 1e 01 01
+			15 00 02 80 47
+			15 00 02 81 40
+			15 00 02 82 04
+			15 00 02 83 77
+			15 00 02 84 0f
+			15 00 02 85 70
+			15 78 02 86 70
+		];
+
+		display-timings {
 			native-mode = <&timing0>;
 
 			timing0: timing0 {
-				clock-frequency = <150000000>;
-				hactive = <1200>;
-				vactive = <1920>;
-				hback-porch = <80>;
-				hfront-porch = <81>;
-				vback-porch = <21>;
-				vfront-porch = <21>;
-				hsync-len = <10>;
-				vsync-len = <3>;
+				clock-frequency = <49500000>;
+				hactive = <1024>;
+				hfront-porch = <120>;
+				hsync-len = <40>;
+				hback-porch = <120>;
+				vactive = <600>;
+				vfront-porch = <14>;
+				vsync-len = <4>;
+				vback-porch = <14>;
 				hsync-active = <0>;
 				vsync-active = <0>;
 				de-active = <0>;
 				pixelclk-active = <0>;
 			};
 		};
-*/
 	};
 };
