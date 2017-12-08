@@ -267,8 +267,12 @@
 	wireless-wlan {
 		compatible = "wlan-platdata";
 
+		vref_ctrl_enable;
+		vref_ctrl_gpio = <&gpio1 RK_PA3 GPIO_ACTIVE_LOW>;
+
 		wifi_chip_type = "rtl8723bs";
 		WIFI,host_wake_irq = <&gpio3 RK_PC7 GPIO_ACTIVE_HIGH>;
+		WIFI,poweren_gpio  = <&gpio3 RK_PD3 GPIO_ACTIVE_HIGH>;
 		status = "okay";
 	};
 };
@@ -365,13 +369,14 @@
 };
 
 &sdio {
-	cap-mmc-highspeed;
+	max-frequency = <50000000>;
+	cap-sd-highspeed;
 	supports-sdio;
 	ignore-pm-notify;
 	keep-power-in-suspend;
 	non-removable;
-	cap-sdio-irq;
-	status = "disabled";
+	/* vmmc-supply = <&ldo5>; */
+	status = "okay";
 };
 
 &u2phy {
