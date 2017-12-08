@@ -45,7 +45,6 @@
 #include <dt-bindings/pwm/pwm.h>
 #include <dt-bindings/sensor-dev.h>
 #include "rk3128.dtsi"
-#include "rk3128-dram-default-timing.dtsi"
 
 #include <dt-bindings/soc/rockchip-system-status.h>
 #include <dt-bindings/display/mipi_dsi.h>
