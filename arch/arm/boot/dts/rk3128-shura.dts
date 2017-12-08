@@ -130,9 +130,18 @@
 				 10   9   8   8   7   6   6   5
 				  4   4   3   2   1   1   1   0>;
 		default-brightness-level = <128>;
-		/* enable-gpios = <&gpio2 RK_PB6 GPIO_ACTIVE_HIGH>; */
+		power-supply = <&vcc_backlight>;
+		enable-gpios = <&gpio2 RK_PC4 GPIO_ACTIVE_HIGH>;
+		status = "okay";
 	};
 
+	vcc_backlight: vcc-backlight {
+		compatible = "regulator-fixed";
+		regulator-name = "vcc_backlight";
+		regulator-min-microvolt = <5000000>;
+		regulator-max-microvolt = <5000000>;
+		regulator-always-on;
+	};
 
 
 	vcc_sys: vcc-sys {
@@ -450,7 +459,7 @@
 	status = "okay";
 
 	panel@0 {
-		compatible = "fc,fy07018dh26d372-d", "simple-panel-dsi";
+		compatible = "simple-panel-dsi";
 		reg = <0>;
 		backlight = <&backlight>;
 		power-supply = <&vcc_lcd>;
